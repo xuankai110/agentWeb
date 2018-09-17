@@ -232,7 +232,7 @@ public class OrderReturnController extends BaseController {
     @RequestMapping(value = "/analysisFile")
     @ResponseBody
     public ResultVO analysisFile(@RequestParam(value = "file", required = false) MultipartFile file, HttpServletRequest request) {
-        if (file == null) {
+        /*if (file == null) {
             return ResultVO.fail("请上传文件");
         }
 
@@ -336,7 +336,7 @@ public class OrderReturnController extends BaseController {
 
         } catch (Exception e) {
             e.printStackTrace();
-        }
+        }*/
 
         return ResultVO.fail("解析excel文件失败");
     }

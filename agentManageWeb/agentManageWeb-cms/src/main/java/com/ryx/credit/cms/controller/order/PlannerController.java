@@ -73,13 +73,11 @@ public class PlannerController extends BaseController {
     @ResponseBody
     public Object batchPlanner(@RequestBody AgentVo agentVo){
         try {
-            AgentResult agentResult = plannerService.batchPlanner(agentVo.getReqListMap(), agentVo.getReceiptPlan(), String.valueOf(getUserId()));
+            AgentResult agentResult =null;
             if(agentResult.isOK()){
                 return renderSuccess("批量保存成功！");
             }
             return renderSuccess("批量保存失败！");
-        } catch (MessageException e) {
-            return renderError(e.getMsg());
         } catch (ProcessException e) {
             return renderError(e.getMessage());
         } catch (Exception e) {

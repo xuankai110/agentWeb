@@ -89,7 +89,7 @@ public class BusinessPlatformController extends BaseController {
         Long userId = getUserId();
         String flag = request.getParameter("flag");
         agentBusInfo.setcUser(String.valueOf(userId));
-        PageInfo resultPageInfo = businessPlatformService.queryBusinessPlatformList(agentBusInfo, agent, pageInfo,flag);
+        PageInfo resultPageInfo = null;
         return resultPageInfo;
     }
 
@@ -162,7 +162,7 @@ public class BusinessPlatformController extends BaseController {
     public Object verifyAgent(String agUniqNum) {
         Agent verAgent = new Agent();
         verAgent.setAgUniqNum(agUniqNum);
-        Agent agent = businessPlatformService.verifyAgent(verAgent);
+        Agent agent = null;
         if (agent != null) {
             return renderSuccess(JsonUtil.objectToJson(agent));
         } else {
