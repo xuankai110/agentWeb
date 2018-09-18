@@ -13,14 +13,6 @@ import com.ryx.credit.profit.pojo.ImportDeductionDetail;
  */
 public interface ImportDeductionDetailService {
 
-    /**
-     * 获取分页列表
-     * @param importDeductionDetail 扣款信息
-     * @param page 分页信息
-     * @return 分页列表
-     */
-    PageInfo getImportDeductionDetailList(ImportDeductionDetail importDeductionDetail, Page page);
-
 
     /*** 
     * @Description: 新增导入扣款信息
