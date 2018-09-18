@@ -10,8 +10,6 @@ import com.ryx.credit.commons.utils.StringUtils;
 import com.ryx.credit.profit.dao.ImportDeductionDetailMapper;
 import com.ryx.credit.profit.pojo.ImportDeductionDetail;
 import com.ryx.credit.profit.pojo.ImportDeductionDetailExample;
-import com.ryx.credit.profit.pojo.ProfitDeduction;
-import com.ryx.credit.profit.pojo.ProfitDeductionExample;
 import com.ryx.credit.profit.service.ImportDeductionDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

@@ -3,8 +3,6 @@ package com.ryx.credit.profit.service;
 import com.ryx.credit.common.util.Page;
 import com.ryx.credit.common.util.PageInfo;
 import com.ryx.credit.profit.pojo.ImportDeductionDetail;
-import com.ryx.credit.profit.pojo.ProfitStaging;
-import com.ryx.credit.profit.pojo.ProfitStagingDetail;
 
 /**
  * @author zhaodw

@@ -21,7 +21,9 @@
           <element id="library" level="project" name="Maven: com.sun.mail:javax.mail:1.5.4" />
           <element id="library" level="project" name="Maven: com.ryx.ry:agentManageAdmin-api:1.0-SNAPSHOT" />
           <element id="library" level="project" name="Maven: com.ryx.ry:agentManageActivity-api:1.0-SNAPSHOT" />
-          <element id="library" level="project" name="Maven: com.ryx.ry:agentManageProfit-api:1.0-SNAPSHOT" />
+          <element id="archive" name="agentManageProfit-api-1.0-SNAPSHOT.jar">
+            <element id="module-output" name="agentManageProfit-api" />
+          </element>
           <element id="library" level="project" name="Maven: org.springframework.batch:spring-batch-core:3.0.6.RELEASE" />
           <element id="library" level="project" name="Maven: com.ibm.jbatch:com.ibm.jbatch-tck-spi:1.0" />
           <element id="library" level="project" name="Maven: javax.batch:javax.batch-api:1.0" />

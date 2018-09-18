@@ -1,19 +1,10 @@
 package com.ryx.credit.profit.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
-import com.ryx.credit.common.enumc.TabId;
 import com.ryx.credit.common.util.AppConfig;
 import com.ryx.credit.common.util.DateUtil;
 import com.ryx.credit.common.util.HttpClientUtil;
 import com.ryx.credit.common.util.JsonUtil;
-import com.ryx.credit.profit.dao.PAgentPidLinkMapper;
-import com.ryx.credit.profit.dao.ProfitSupplyDiffMapper;
-import com.ryx.credit.profit.pojo.PAgentPidLink;
-import com.ryx.credit.profit.pojo.ProfitSupplyDiff;
-import com.ryx.credit.profit.service.IProfitDService;
-import com.ryx.credit.profit.service.IProfitDirectService;
-import com.ryx.credit.profit.service.ProfitDeductionService;
-import com.ryx.credit.profit.service.ProfitDetailMonthService;
 import com.ryx.credit.service.dict.IdService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -36,20 +27,7 @@ public class BuchaDateTest {
 
     @Autowired
     IdService idService;
-    @Autowired
-    IProfitDService profitDService;
-    @Autowired
-    ProfitComputerServiceImpl computerService;
-    @Autowired
-    ProfitDetailMonthService profitDetailMonthService;
-    @Autowired
-    IProfitDirectService profitDirectService;
-    @Autowired
-    ProfitDeductionService profitDeductionService;
-    @Autowired
-    PAgentPidLinkMapper pidLinkMapper;
-    @Autowired
-    ProfitSupplyDiffMapper supplyDiffMapper;
+
     private int index=1;
 
     @Test
@@ -87,18 +65,7 @@ public class BuchaDateTest {
 
     public void insertProfitDiff(List<JSONObject> profitDays,String date){
         for(JSONObject json:profitDays){
-            ProfitSupplyDiff profitDiff = new ProfitSupplyDiff();
-            profitDiff.setId(idService.genId(TabId.P_PROFIT_SUPPLU_DIFF));
-            profitDiff.setAgentId(json.getString("AGENTID"));
-            profitDiff.setAgentPid(json.getString("AGENTPID"));
-            profitDiff.setDiffAmt(json.getBigDecimal("DIFFAMT"));
-            profitDiff.setDiffDate(json.getString("DIFFDATE"));
-            profitDiff.setDiffType(json.getString("DIFFTYPE"));
-            profitDiff.setParentAgentid(json.getString("PARENTAGENTID"));
-            profitDiff.setParentAgentpid(json.getString("PARENTAGENTPID"));
-            profitDiff.setAgentName(json.getString("AGENTNAME"));
-            profitDiff.setParentAgentname(json.getString("PARENTAGENTNAME"));
-            supplyDiffMapper.insert(profitDiff);
+            //
 
         }
         synchroProfitDiff(date);

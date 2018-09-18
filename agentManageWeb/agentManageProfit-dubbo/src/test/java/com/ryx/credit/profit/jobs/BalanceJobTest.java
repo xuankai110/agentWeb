@@ -25,18 +25,11 @@ public class BalanceJobTest {
 
     private Logger logger = LoggerFactory.getLogger(BalanceJobTest.class);
 
-    @Autowired
+    /*@Autowired
     private BalanceSerialDealJob balanceSerialDealJob;
 
-    /*** 
-    * @Description: 测试任务处理
-    * @Param:  
-    * @return:  
-    * @Author: zhaodw 
-    * @Date: 2018/7/30 
-    */
     @Test
     public void testDeal() {
         balanceSerialDealJob.deal();
-    }
+    }*/
 }

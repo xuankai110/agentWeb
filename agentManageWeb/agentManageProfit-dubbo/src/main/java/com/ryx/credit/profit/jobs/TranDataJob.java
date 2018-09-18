@@ -7,9 +7,6 @@ import com.ryx.credit.common.util.AppConfig;
 import com.ryx.credit.common.util.HttpClientUtil;
 import com.ryx.credit.common.util.PageInfo;
 import com.ryx.credit.commons.utils.StringUtils;
-import com.ryx.credit.profit.pojo.ProfitOrganTranMonth;
-import com.ryx.credit.profit.service.ProfitComputerService;
-import com.ryx.credit.profit.service.ProfitOrganTranMonthService;
 import com.ryx.credit.service.dict.IdService;
 import com.ryx.credit.service.profit.IPosProfitDataService;
 import org.apache.log4j.Logger;
@@ -41,11 +38,6 @@ public class TranDataJob {
     @Autowired
     private IPosProfitDataService posProfitDataService;
 
-    @Autowired
-    private ProfitOrganTranMonthService profitOrganTranMonthService;
-
-    @Autowired
-    private ProfitComputerService profitComputerService;
 
     @Autowired
     private IdService idService;
@@ -72,7 +64,7 @@ public class TranDataJob {
                         BigDecimal orgJwAmt = tranData.getBigDecimal("dlPosJwAmt")==null?BigDecimal.ZERO:tranData.getBigDecimal("dlPosJwAmt");//代理商境外卡交易总金额
                         tranAmt = zydlPosAmt.subtract(zyPosAmt).subtract(hyxJwAmt).subtract(orgJwAmt);
                     }
-                    insertOrUpdate(json, settleMonth, tranAmt, zyssAmt);//新增二维码
+                    //insertOrUpdate(json, settleMonth, tranAmt, zyssAmt);//新增二维码
                 }else{
                     LOG.error("月份："+settleMonth+"，二维码提供的没有获取到数据");
                 }
@@ -84,87 +76,6 @@ public class TranDataJob {
         }
     }
 
-
-    /***
-    * @Description:新增或修改数据
-    * @Param:json 分润数据
-    * @Param:settleMonth 分润月份
-    * @Param:tranAmt pos交易金额
-    * @Param:zyssAmt 手刷交易金额
-    * @Author: zhaodw
-    * @Date: 2018/8/3
-    */
-    private void insertOrUpdate(JSONObject json, String settleMonth, BigDecimal tranAmt, BigDecimal zyssAmt) {
-        ProfitOrganTranMonth profitOrganTranMonth = new ProfitOrganTranMonth();
-        profitOrganTranMonth.setProfitDate(settleMonth);
-        profitOrganTranMonthService.delete(profitOrganTranMonth);
-        addPos(json, settleMonth, tranAmt);
-        addMpos(settleMonth, zyssAmt);
-        addQr(json, settleMonth);
-    }
-
-    /***
-     * @Description: 增加MPOS数据
-     * @Param: json
-     * @Author: zhaodw
-     * @Date: 2018/8/1
-     */
-    private void addMpos(String settleMonth, BigDecimal tranAmt) {
-        ProfitOrganTranMonth profitOrganTranMonth = new ProfitOrganTranMonth();
-        profitOrganTranMonth.setProfitDate(settleMonth);
-        profitOrganTranMonth.setCheckDate(LocalDate.now().format(DateTimeFormatter.BASIC_ISO_DATE));
-        profitOrganTranMonth.setId(idService.genId(TabId.P_ORGAN_TRAN_MONTH));
-        profitOrganTranMonth.setProductType("02");
-        profitOrganTranMonth.setProductName("MPOS");
-        profitOrganTranMonth.setTranAmt(tranAmt);
-        try {
-            BigDecimal settleAmt = profitComputerService.synchroSSTotalTransAmt(null);
-            profitOrganTranMonth.setSettleAmt(settleAmt);
-        }catch(Exception e) {
-            e.printStackTrace();
-            throw  new RuntimeException("获取手刷分润交易数据失败");
-        }
-        profitOrganTranMonth.setDifferenceAmt(profitOrganTranMonth.getSettleAmt().subtract(tranAmt));
-        profitOrganTranMonthService.insert(profitOrganTranMonth);
-    }
-
-    /***
-    * @Description: 增加 二维码核对数据
-    * @Param: json
-    * @Author: zhaodw
-    * @Date: 2018/8/1
-    */
-    private void addQr(JSONObject json, String settleMonth) {
-        ProfitOrganTranMonth profitOrganTranMonth = new ProfitOrganTranMonth();
-        profitOrganTranMonth.setProfitDate(settleMonth);
-        profitOrganTranMonth.setCheckDate(LocalDate.now().format(DateTimeFormatter.BASIC_ISO_DATE));
-        profitOrganTranMonth.setId(idService.genId(TabId.P_ORGAN_TRAN_MONTH));
-        profitOrganTranMonth.setProductType("03");
-        profitOrganTranMonth.setProductName("二维码");
-        profitOrganTranMonth.setTranAmt(json.getBigDecimal("QR_TRAN_AMT"));
-        profitOrganTranMonth.setSettleAmt(json.getBigDecimal("PFT_QR_TRAN_AMT"));
-        profitOrganTranMonth.setDifferenceAmt(json.getBigDecimal("PFT_QR_TRAN_AMT").subtract(json.getBigDecimal("QR_TRAN_AMT")));
-        profitOrganTranMonthService.insert(profitOrganTranMonth);
-    }
-
-    /***
-     * @Description: 增加POS数据
-     * @Param: json
-     * @Author: zhaodw
-     * @Date: 2018/8/1
-     */
-    private void addPos(JSONObject json, String settleMonth, BigDecimal tranAmt) {
-        ProfitOrganTranMonth profitOrganTranMonth = new ProfitOrganTranMonth();
-        profitOrganTranMonth.setProfitDate(settleMonth);
-        profitOrganTranMonth.setCheckDate(LocalDate.now().format(DateTimeFormatter.BASIC_ISO_DATE));
-        profitOrganTranMonth.setId(idService.genId(TabId.P_ORGAN_TRAN_MONTH));
-        profitOrganTranMonth.setProductType("01");
-        profitOrganTranMonth.setProductName("POS");
-        profitOrganTranMonth.setSettleAmt(json.getBigDecimal("PFT_POS_TRAN_AMT"));
-        profitOrganTranMonth.setTranAmt(tranAmt);
-        profitOrganTranMonth.setDifferenceAmt(profitOrganTranMonth.getSettleAmt().subtract(tranAmt));
-        profitOrganTranMonthService.insert(profitOrganTranMonth);
-    }
 
 
     /***

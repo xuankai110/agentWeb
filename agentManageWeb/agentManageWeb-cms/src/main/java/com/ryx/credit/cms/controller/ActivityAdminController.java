@@ -66,22 +66,6 @@ public class ActivityAdminController extends BaseController {
     private AgentService agentService;
     @Autowired
     private BusActRelService busActRelService;
-
-    @Autowired
-    private ProfitDeductionService profitDeductionServiceImpl;
-
-    @Autowired
-    private StagingService stagingService;
-    @Autowired
-    private ToolsDeductService toolsDeductService;
-    @Autowired
-    private ProfitMonthService profitMonthService;
-    @Autowired
-    private IPosRewardService posRewardService;
-    @Autowired
-    private IPosCheckService posCheckService;
-    @Autowired
-    private IPTaxAdjustService taxAdjustService;
     @Autowired
     private ActRuTaskService actRuTaskService;
 
@@ -226,62 +210,7 @@ public class ActivityAdminController extends BaseController {
 
     private TaskObject busDispose(BusActRel busActRel,TaskObject taskObject)throws Exception {
         if(busActRel != null && (busActRel.getBusType().equals(BusActRelBusType.STAGING.name()) || busActRel.getBusType().equals(BusActRelBusType.OTHER_DEDUCTION.name()))) {
-            if (busActRel.getBusType().equals(BusActRelBusType.OTHER_DEDUCTION.name())
-                    && "其他扣款分期调整信息修改".equals(taskObject.getName())
-                    && !getUserId().toString().equals(busActRel.getcUser())) {
-                throw new Exception("信息错误");
-            }
-            ProfitStaging staging = stagingService.getStagingById(busActRel.getBusId());
-            if (staging !=null) {
-                ProfitDeduction deduction = profitDeductionServiceImpl.getProfitDeductionById(staging.getSourceId());
-                if (deduction != null) {
-                    taskObject.setBusData(deduction.getAgentName());
-                }
-            }
-            taskObject.setBusType(busActRel.getBusType());
-            taskObject.setBusId(busActRel.getBusId());
-        } else if(busActRel != null && busActRel.getBusType().equals(BusActRelBusType.THAW.name())) {
-            if ("解冻分润信息修改".equals(taskObject.getName()) && !getUserId().toString().equals(busActRel.getcUser())) {
-                throw new Exception("信息错误");
-            }
-            ProfitUnfreeze unfreeze = profitMonthService.getProfitUnfreezeById(busActRel.getBusId());
-            if (unfreeze !=null) {
-                taskObject.setBusData(unfreeze.getAgentId());
-            }
-            taskObject.setBusType(busActRel.getBusType());
-            taskObject.setBusId(busActRel.getBusId());
-        } else if(busActRel != null && busActRel.getBusType().equals(BusActRelBusType.TOOLS.name())) {
-            if ("机具扣款分期调整信息修改".equals(taskObject.getName()) && !getUserId().toString().equals(busActRel.getcUser())) {
-                throw new Exception("信息错误");
-            }
-            ProfitStagingDetail detail = toolsDeductService.getProfitStagingDetail(busActRel.getBusId());
-            if (detail !=null) {
-                ProfitDeduction profitDeduction = profitDeductionServiceImpl.getProfitDeductionById(detail.getStagId());
-                taskObject.setBusData(profitDeduction.getAgentName());
-            }
-            taskObject.setBusType(busActRel.getBusType());
-            taskObject.setBusId(busActRel.getBusId());
-        } else if(busActRel != null && busActRel.getBusType().equals(BusActRelBusType.POSREWARD.name())) {
-            PosReward reward = posRewardService.getPosRewardById(busActRel.getBusId());
-            if (reward !=null) {
-                taskObject.setBusData(reward.getAgentName());
-            }
-            taskObject.setBusType(busActRel.getBusType());
-            taskObject.setBusId(busActRel.getBusId());
-        } else if(busActRel != null && busActRel.getBusType().equals(BusActRelBusType.POSCHECK.name())) {
-            PosCheck check = posCheckService.getPosCheckById(busActRel.getBusId());
-            if (check !=null) {
-                taskObject.setBusData(check.getAgentName());
-            }
-            taskObject.setBusType(busActRel.getBusType());
-            taskObject.setBusId(busActRel.getBusId());
-        } else if(busActRel != null && busActRel.getBusType().equals(BusActRelBusType.POSTAX.name())) {
-            PTaxAdjust adjust = taxAdjustService.getPosTaxById(busActRel.getBusId());
-            if (adjust !=null) {
-                taskObject.setBusData(adjust.getAgentName());
-            }
-            taskObject.setBusType(busActRel.getBusType());
-            taskObject.setBusId(busActRel.getBusId());
+
         } else{
             Map data = agentQueryService.queryInfoByProInsId(taskObject.getProcInstId());
             if (data != null) {
